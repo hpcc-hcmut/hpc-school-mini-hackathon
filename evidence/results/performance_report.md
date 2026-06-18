@@ -1,0 +1,1 @@
+ResNet67 consumed the most power.

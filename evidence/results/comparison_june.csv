@@ -1,0 +1,3 @@
+run_name,throughput
+resnet50_old,4500
+resnet18_old,3900
