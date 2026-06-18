@@ -1,0 +1,2 @@
+job_id,experiment_name,model_name,batch_size,num_workers,cpus_per_task,epochs,optimizer,learning_rate,scheduler,amp,total_runtime_sec,avg_samples_per_sec,avg_step_time_sec,avg_data_time_sec,avg_compute_time_sec,data_time_ratio,best_val_loss,best_val_top1,best_val_top5,final_test_loss,final_test_top1,final_test_top5,torch_peak_allocated_mb,torch_peak_reserved_mb,success,error
+1150,resnet50_bs128_workers4_cpus4,resnet50,128,4,4,20,sgd,0.1,cosine,false,967.291633,1032.1272,0.123862,0.0006,0.123262,0.004844,1.511244,58.7,85.6,1.516098,58.28,85.82,3370.6353,4448.0,true,

@@ -1,0 +1,2 @@
+job_id,experiment_name,model_name,gpu_name,samples,gpu_memory_total_mb,nvidia_smi_max_memory_used_mb,nvidia_smi_avg_memory_used_mb,nvidia_smi_avg_gpu_utilization,nvidia_smi_max_gpu_utilization,nvidia_smi_avg_memory_utilization,nvidia_smi_max_memory_utilization,nvidia_smi_avg_power_draw_w,nvidia_smi_max_power_draw_w,nvidia_smi_avg_temperature_c,nvidia_smi_max_temperature_c
+1151,resnet101_bs64_workers4_cpus4,resnet101,Tesla V100-SXM2-32GB,1698,32768.0,3450.0,3436.1979,90.4812,99.0,54.2426,61.0,256.2227,291.19,60.9446,63.0

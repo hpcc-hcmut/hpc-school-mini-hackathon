@@ -1,0 +1,7 @@
+job_id,experiment_name,model_name,batch_size,num_workers,cpus_per_task,epochs,avg_samples_per_sec,avg_step_time_sec,avg_data_time_sec,avg_compute_time_sec,data_time_ratio,best_val_top1,best_val_top5,final_test_top1,final_test_top5,torch_peak_allocated_mb,torch_peak_reserved_mb,nvidia_smi_max_memory_used_mb,nvidia_smi_avg_memory_used_mb,nvidia_smi_avg_gpu_utilization,nvidia_smi_max_gpu_utilization,nvidia_smi_avg_power_draw_w,success,error
+1145,custom,resnet34,128,4,4,20,1834.937,0.06967,0.000658,0.069012,0.009447,66.38,89.8,66.51,89.5,1287.0684,1764.0,2158.0,2127.6216,87.6667,96.0,246.5686,true,
+1151,resnet101_bs64_workers4_cpus4,resnet101,64,4,4,20,589.149,0.108496,0.0004,0.108097,0.003684,66.58,90.98,66.92,90.71,2780.9321,3056.0,3450.0,3436.1979,90.4812,99.0,256.2227,true,
+1147,resnet152_bs64_workers4_cpus4,resnet152,64,4,4,20,408.7954,0.156363,0.000379,0.155984,0.002427,66.66,90.64,67.28,90.74,3904.1602,4446.0,4840.0,4823.3167,92.0025,99.0,246.6057,true,
+1148,resnet18_bs128_workers4_cpus4,resnet18,128,4,4,20,3213.636,0.039781,0.000597,0.039184,0.015006,69.98,91.46,70.38,91.29,915.0059,1342.0,1736.0,1701.6283,81.6578,93.0,217.5048,true,
+1149,resnet34_bs128_workers4_cpus4,resnet34,128,4,4,20,1823.7979,0.070096,0.00063,0.069466,0.00899,66.76,90.1,66.67,89.62,1287.0684,1764.0,2158.0,2128.4218,84.9315,95.0,245.5486,true,
+1150,resnet50_bs128_workers4_cpus4,resnet50,128,4,4,20,1032.1272,0.123862,0.0006,0.123262,0.004844,58.7,85.6,58.28,85.82,3370.6353,4448.0,4842.0,4807.7346,90.5134,100.0,254.8852,true,

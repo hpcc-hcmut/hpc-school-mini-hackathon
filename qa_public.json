@@ -1,0 +1,426 @@
+[
+  {
+    "question_id": "Q001",
+    "difficulty": "easy",
+    "question": "Where is the GPU allocation for a single training run requested?",
+    "answer": "The single-run GPU allocation is requested in `evidence/repo/slurm/train-one.slurm` with `#SBATCH --gres=gpu:1`.",
+    "evidence": [
+      {
+        "file": "evidence/repo/slurm/train-one.slurm",
+        "lines": [
+          2,
+          11
+        ],
+        "reason": "Defines the single-run Slurm resource request, including one GPU."
+      }
+    ]
+  },
+  {
+    "question_id": "Q002",
+    "difficulty": "easy",
+    "question": "Where is CUDA made visible to the Apptainer training process?",
+    "answer": "CUDA is passed into the Apptainer training process by `apptainer exec --nv` in `evidence/repo/slurm/train-one.slurm`.",
+    "evidence": [
+      {
+        "file": "evidence/repo/slurm/train-one.slurm",
+        "lines": [
+          59,
+          64
+        ],
+        "reason": "Launches `evidence/repo/src/train.py` inside Apptainer with `--nv`."
+      }
+    ]
+  },
+  {
+    "question_id": "Q003",
+    "difficulty": "easy",
+    "question": "Which script records the raw GPU timeline during training?",
+    "answer": "`evidence/repo/slurm/train-one.slurm` starts `nvidia-smi` in the background and writes the raw timeline to `evidence/results/gpu_timeline_<jobid>_<experiment>.csv`.",
+    "evidence": [
+      {
+        "file": "evidence/repo/slurm/train-one.slurm",
+        "lines": [
+          32,
+          48
+        ],
+        "reason": "Builds the GPU timeline path and starts one-second `nvidia-smi` logging."
+      }
+    ]
+  },
+  {
+    "question_id": "Q004",
+    "difficulty": "easy",
+    "question": "Which command summarizes the raw GPU timeline after training?",
+    "answer": "`evidence/repo/slurm/train-one.slurm` calls `evidence/repo/src/summarize_gpu_log.py` after training to create the GPU summary CSV.",
+    "evidence": [
+      {
+        "file": "evidence/repo/slurm/train-one.slurm",
+        "lines": [
+          67,
+          76
+        ],
+        "reason": "Stops monitoring and runs the GPU summary script."
+      }
+    ]
+  },
+  {
+    "question_id": "Q005",
+    "difficulty": "easy",
+    "question": "How does the dataset preparation script split CIFAR-100?",
+    "answer": "The preparation script creates a deterministic split of 45,000 train images, 5,000 validation images, and 10,000 test images.",
+    "evidence": [
+      {
+        "file": "evidence/repo/src/data/prepare_cifar100_imagefolder.py",
+        "lines": [
+          66,
+          80
+        ],
+        "reason": "Shuffles train indices, splits validation, and reports train/val/test counts."
+      },
+      {
+        "file": "evidence/repo/src/data/prepare_cifar100_imagefolder.py",
+        "lines": [
+          91,
+          92
+        ],
+        "reason": "Prints the final expected counts."
+      }
+    ]
+  },
+  {
+    "question_id": "Q006",
+    "difficulty": "easy",
+    "question": "Which dataset loader is used for the train, validation, and test folders?",
+    "answer": "The repository loads each split with `torchvision.datasets.ImageFolder`.",
+    "evidence": [
+      {
+        "file": "evidence/repo/src/data/datasets.py",
+        "lines": [
+          6,
+          10
+        ],
+        "reason": "Imports ImageFolder for dataset loading."
+      },
+      {
+        "file": "evidence/repo/src/data/datasets.py",
+        "lines": [
+          28,
+          35
+        ],
+        "reason": "Creates ImageFolder datasets for train, val, and test splits."
+      }
+    ]
+  },
+  {
+    "question_id": "Q007",
+    "difficulty": "easy",
+    "question": "Which custom ResNet variants are registered in the model file?",
+    "answer": "The custom model file registers `resnet18`, `resnet34`, `resnet50`, `resnet101`, and `resnet152`.",
+    "evidence": [
+      {
+        "file": "evidence/repo/src/models/resnet.py",
+        "lines": [
+          140,
+          168
+        ],
+        "reason": "Registers all five supported ResNet variants."
+      }
+    ]
+  },
+  {
+    "question_id": "Q008",
+    "difficulty": "medium",
+    "question": "What prevents users from passing pretrained or weights arguments to the custom models?",
+    "answer": "`resolve_num_classes` rejects `pretrained` and `weights` arguments, forcing the custom ResNets to train from scratch.",
+    "evidence": [
+      {
+        "file": "evidence/repo/src/models/registry.py",
+        "lines": [
+          29,
+          36
+        ],
+        "reason": "Rejects pretrained-related model arguments."
+      }
+    ]
+  },
+  {
+    "question_id": "Q009",
+    "difficulty": "easy",
+    "question": "Where are the allowed model names and batch sizes defined?",
+    "answer": "The allowed model names and batch sizes are defined in `evidence/repo/src/utils/config.py`.",
+    "evidence": [
+      {
+        "file": "evidence/repo/src/utils/config.py",
+        "lines": [
+          9,
+          18
+        ],
+        "reason": "Defines allowed models, batch sizes, worker counts, and CPU counts."
+      }
+    ]
+  },
+  {
+    "question_id": "Q010",
+    "difficulty": "medium",
+    "question": "Where does the training code fail if CUDA is unavailable?",
+    "answer": "`evidence/repo/src/train.py` raises a clear runtime error when `torch.cuda.is_available()` is false.",
+    "evidence": [
+      {
+        "file": "evidence/repo/src/train.py",
+        "lines": [
+          94,
+          101
+        ],
+        "reason": "Checks CUDA availability and selects the CUDA device."
+      }
+    ]
+  },
+  {
+    "question_id": "Q011",
+    "difficulty": "easy",
+    "question": "Which optimizer and scheduler does the training script construct?",
+    "answer": "The training script constructs SGD with momentum and weight decay, followed by a cosine annealing learning-rate scheduler.",
+    "evidence": [
+      {
+        "file": "evidence/repo/src/train.py",
+        "lines": [
+          125,
+          134
+        ],
+        "reason": "Creates CrossEntropyLoss, SGD, and CosineAnnealingLR."
+      }
+    ]
+  },
+  {
+    "question_id": "Q012",
+    "difficulty": "medium",
+    "question": "Where are per-step training metrics written?",
+    "answer": "Per-step metrics are written by `train_one_epoch` through `append_csv_row` using the `STEP_FIELDS` schema.",
+    "evidence": [
+      {
+        "file": "evidence/repo/src/engine/trainer.py",
+        "lines": [
+          94,
+          111
+        ],
+        "reason": "Collects CUDA memory and writes per-step metric rows."
+      },
+      {
+        "file": "evidence/repo/src/utils/metrics.py",
+        "lines": [
+          10,
+          30
+        ],
+        "reason": "Defines the per-step CSV schema."
+      }
+    ]
+  },
+  {
+    "question_id": "Q013",
+    "difficulty": "easy",
+    "question": "How does the benchmark array choose which config to run?",
+    "answer": "`run-benchmark-array.slurm` indexes the `CONFIGS` list with `SLURM_ARRAY_TASK_ID` and passes that config to `train-one.slurm`.",
+    "evidence": [
+      {
+        "file": "evidence/repo/slurm/run-benchmark-array.slurm",
+        "lines": [
+          16,
+          26
+        ],
+        "reason": "Defines the config list and selects a config by array task id."
+      }
+    ]
+  },
+  {
+    "question_id": "Q014",
+    "difficulty": "easy",
+    "question": "Which benchmark run achieved the highest average throughput?",
+    "answer": "`resnet18_bs128_workers4_cpus4` achieved the highest throughput at 3213.636 samples/sec.",
+    "evidence": [
+      {
+        "file": "evidence/results/comparison.csv",
+        "lines": [
+          1,
+          7
+        ],
+        "reason": "The comparison table shows throughput for all runs."
+      }
+    ]
+  },
+  {
+    "question_id": "Q015",
+    "difficulty": "easy",
+    "question": "Which benchmark run had the lowest PyTorch peak allocated memory?",
+    "answer": "`resnet18_bs128_workers4_cpus4` had the lowest PyTorch peak allocated memory at 915.0059 MB.",
+    "evidence": [
+      {
+        "file": "evidence/results/comparison.csv",
+        "lines": [
+          1,
+          7
+        ],
+        "reason": "The comparison table lists `torch_peak_allocated_mb` for all runs."
+      }
+    ]
+  },
+  {
+    "question_id": "Q016",
+    "difficulty": "easy",
+    "question": "Which benchmark run had the best final test top-1 accuracy?",
+    "answer": "`resnet18_bs128_workers4_cpus4` had the best final test top-1 accuracy at 70.38%.",
+    "evidence": [
+      {
+        "file": "evidence/results/comparison.csv",
+        "lines": [
+          1,
+          7
+        ],
+        "reason": "The comparison table lists final test top-1 accuracy for every run."
+      }
+    ]
+  },
+  {
+    "question_id": "Q017",
+    "difficulty": "medium",
+    "question": "Which run had the highest average GPU utilization?",
+    "answer": "`resnet152_bs64_workers4_cpus4` had the highest average GPU utilization at 92.0025%.",
+    "evidence": [
+      {
+        "file": "evidence/results/comparison.csv",
+        "lines": [
+          1,
+          7
+        ],
+        "reason": "The comparison table includes average GPU utilization for all benchmark runs."
+      }
+    ]
+  },
+  {
+    "question_id": "Q018",
+    "difficulty": "medium",
+    "question": "Which run had the highest maximum GPU memory used according to nvidia-smi?",
+    "answer": "`resnet50_bs128_workers4_cpus4` had the highest maximum `nvidia-smi` memory used at 4842 MB.",
+    "evidence": [
+      {
+        "file": "evidence/results/comparison.csv",
+        "lines": [
+          1,
+          7
+        ],
+        "reason": "The comparison table includes `nvidia_smi_max_memory_used_mb` for all runs."
+      }
+    ]
+  },
+  {
+    "question_id": "Q019",
+    "difficulty": "easy",
+    "question": "Which benchmark run was slowest by average samples per second?",
+    "answer": "`resnet152_bs64_workers4_cpus4` was slowest at 408.7954 samples/sec.",
+    "evidence": [
+      {
+        "file": "evidence/results/comparison.csv",
+        "lines": [
+          1,
+          7
+        ],
+        "reason": "The comparison table lists average samples per second for every run."
+      }
+    ]
+  },
+  {
+    "question_id": "Q020",
+    "difficulty": "easy",
+    "question": "Did all six compared runs finish successfully?",
+    "answer": "Yes, all six rows in `comparison.csv` have `success` set to true.",
+    "evidence": [
+      {
+        "file": "evidence/results/comparison.csv",
+        "lines": [
+          1,
+          7
+        ],
+        "reason": "The comparison table includes the success column for all six runs."
+      }
+    ]
+  },
+  {
+    "question_id": "Q021",
+    "difficulty": "easy",
+    "question": "What GPU model appears in the GPU summaries?",
+    "answer": "The GPU summaries report `Tesla V100-SXM2-32GB` as the GPU model.",
+    "evidence": [
+      {
+        "file": "evidence/results/gpu_summary_1148_resnet18_bs128_workers4_cpus4.csv",
+        "lines": [
+          1,
+          2
+        ],
+        "reason": "Shows the GPU name and total memory for the ResNet18 run."
+      }
+    ]
+  },
+  {
+    "question_id": "Q022",
+    "difficulty": "medium",
+    "question": "How similar were the custom run and the ResNet34 benchmark in model and batch size?",
+    "answer": "Both `custom` and `resnet34_bs128_workers4_cpus4` used `resnet34` with batch size 128, 4 workers, and 4 CPUs per task.",
+    "evidence": [
+      {
+        "file": "evidence/results/comparison.csv",
+        "lines": [
+          1,
+          7
+        ],
+        "reason": "Rows for `custom` and `resnet34_bs128_workers4_cpus4` show the same model and resource settings."
+      }
+    ]
+  },
+  {
+    "question_id": "Q023",
+    "difficulty": "easy",
+    "question": "Which run had the best final test top-5 accuracy?",
+    "answer": "`resnet18_bs128_workers4_cpus4` had the best final test top-5 accuracy at 91.29%.",
+    "evidence": [
+      {
+        "file": "evidence/results/comparison.csv",
+        "lines": [
+          1,
+          7
+        ],
+        "reason": "The comparison table lists final test top-5 accuracy for all runs."
+      }
+    ]
+  },
+  {
+    "question_id": "Q024",
+    "difficulty": "medium",
+    "question": "Which run drew the highest average power?",
+    "answer": "`resnet101_bs64_workers4_cpus4` drew the highest average power at 256.2227 W.",
+    "evidence": [
+      {
+        "file": "evidence/results/comparison.csv",
+        "lines": [
+          1,
+          7
+        ],
+        "reason": "The comparison table includes average power draw for each run."
+      }
+    ]
+  },
+  {
+    "question_id": "Q025",
+    "difficulty": "medium",
+    "question": "Did the deeper ResNet50 outperform ResNet18 on final test top-1 accuracy?",
+    "answer": "No, ResNet50 reached 58.28% final test top-1 while ResNet18 reached 70.38%.",
+    "evidence": [
+      {
+        "file": "evidence/results/comparison.csv",
+        "lines": [
+          1,
+          7
+        ],
+        "reason": "Rows for ResNet18 and ResNet50 show their final test top-1 accuracies."
+      }
+    ]
+  }
+]

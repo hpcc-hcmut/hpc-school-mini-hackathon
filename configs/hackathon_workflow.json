@@ -1,0 +1,26 @@
+{
+  "_annotation": {
+    "author": "HCMUT HPC Summer School Hackathon",
+    "permission": "TEAM_EDITABLE",
+    "note": "Teams may edit model routing, parallelism, context length, and generation settings in this file."
+  },
+  "model_plan": {
+    "file_inventory": "llama3.2:3b",
+    "code_agent": "llama3.2:3b",
+    "config_agent": "llama3.2:3b",
+    "slurm_agent": "llama3.2:3b",
+    "metrics_agent": "llama3.2:3b",
+    "qa_agent": "llama3.2:3b",
+    "aggregator": "qwen3:4b",
+    "reasoner": "qwen3:4b",
+    "verifier": "llama3.2:3b"
+  },
+  "max_parallel_agents": 4,
+  "answer_batches": 2,
+  "num_ctx": 16384,
+  "temperature": 0.1,
+  "keep_alive": "30m",
+  "preload_models": false,
+  "max_chars_per_file": 12000,
+  "max_prompt_chars": 50000
+}

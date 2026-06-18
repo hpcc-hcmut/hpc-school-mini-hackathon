@@ -1,0 +1,28 @@
+{
+  "experiment_name": "resnet34_bs128_workers4_cpus4",
+
+  "model_name": "resnet34",
+  "batch_size": 128,
+  "num_workers": 4,
+  "cpus_per_task": 4,
+
+  "dataset_dir": "data/cifar100",
+  "image_size": 32,
+  "num_classes": 100,
+
+  "epochs": 20,
+  "optimizer": "sgd",
+  "learning_rate": 0.1,
+  "momentum": 0.9,
+  "weight_decay": 0.0005,
+  "scheduler": "cosine",
+  "amp": false,
+  "gradient_accumulation_steps": 1,
+  "seed": 42,
+
+  "augmentation": "basic",
+
+  "log_every": 20,
+  "save_best_checkpoint": true,
+  "save_latest_checkpoint": true
+}

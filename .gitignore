@@ -1,0 +1,29 @@
+# Organizer/private workspace
+internals/
+.agents/
+.codex/
+qa_private.json
+
+# Generated packages and runtime outputs
+repo.zip
+logs/
+results/hackathon_trace_*.jsonl
+results/hackathon_submission_*.json
+
+# Training artifacts
+checkpoints/*
+!checkpoints/.gitkeep
+data/*
+!data/.gitkeep
+evidence/repo/data/*
+!evidence/repo/data/.gitkeep
+
+# Python/cache artifacts
+__pycache__/
+**/__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Local editor/system noise
+.DS_Store
+*.swp
