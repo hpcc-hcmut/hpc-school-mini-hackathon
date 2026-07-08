@@ -29,7 +29,7 @@ These files are reference workload, scoring input, cluster wrapper, or workflow 
 - `HACKATHON.md`
 - `FILE_OWNERSHIP.md`
 - `qa_public.json`
-- `qa_private.json`
+- `qa_private.json` (instructor-provided private question file, if used in a live event)
 - `slurm/hackathon-parallel-workflow.slurm`
 - `src/ollama_client.py`
 - `src/parallel_runner.py`
@@ -45,5 +45,5 @@ These files are reference workload, scoring input, cluster wrapper, or workflow 
 ## Notes
 
 - JSON files cannot safely use comment syntax, so `configs/hackathon_workflow.json` carries its annotation in a valid `_annotation` field.
-- `qa_public.json` and `qa_private.json` are not annotated in-place because they are scoring/question data. The workflow strips answer/evidence fields before prompting agents.
+- `qa_public.json` and any instructor-provided private question files are not annotated in-place because they are scoring/question data. The workflow strips answer/evidence fields before prompting agents.
 - Slurm files keep the shebang as the first line; annotation starts immediately after it.

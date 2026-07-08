@@ -1,0 +1,17 @@
+{
+  "team_id": "sample-team",
+  "answers": [
+    {
+      "question_id": "sample_q1",
+      "answer": "The GPU is requested through the Slurm --gres directive.",
+      "evidence": ["slurm/example_gpu_job.slurm"],
+      "confidence": 0.85
+    }
+  ],
+  "workflow_metadata": {
+    "num_agents": 6,
+    "num_reasoners": 2,
+    "num_verifiers": 2,
+    "runtime_seconds": 120.5
+  }
+}

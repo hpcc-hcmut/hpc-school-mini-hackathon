@@ -15,6 +15,8 @@
 
 set -euo pipefail
 
+# Site-specific defaults from the original deployment.
+# Override these variables before running on another cluster.
 export CLIENT_IMAGE=${CLIENT_IMAGE:-/share/summer-school/g001/containers/hpc-school-ai.sif}
 export SERVER_IMAGE=${SERVER_IMAGE:-/share/summer-school/g001/containers/llm-serving.sif}
 export OLLAMA_CACHE=${OLLAMA_CACHE:-/share/summer-school/g001/models/ollama}

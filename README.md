@@ -1,5 +1,11 @@
 # HPC School Mini Hackathon
 
+> **Public Release Note:** This repository is the student-facing package for the EduHPC Peachy assignment paper. 
+> The paired instructor-facing leaderboard package is available at: 
+> https://github.com/hpcc-hcmut/hpc-summer-school-leaderboard
+>
+> For the student handout, see [HACKATHON.md](HACKATHON.md).
+
 Starter code for the HCMUT HPC Summer School mini hackathon. Your team will build
 a traceable multi-agent LLM workflow that answers questions about an HPC training
 repository using evidence from source code, Slurm scripts, configs, and benchmark
@@ -18,6 +24,19 @@ and produce a submission JSON with:
 
 The default starter already runs a complete baseline. Your job is to improve
 answer quality, evidence quality, runtime, and workflow design.
+
+### What Students Receive
+- **Evidence corpus:** Frozen training repository (`evidence/repo/`) and benchmark logs (`evidence/results/`).
+- **Starter workflow:** Orchestration scripts, Slurm wrapper, and parallel runner (`src/`, `slurm/`).
+- **Starter prompts & configs:** Baseline files to get started (`prompts/`, `configs/`).
+- **Sample questions:** Public scaffolding questions (`qa_public.json`).
+
+### What Students Should Modify
+- Prompts, workflow configs, agent roles, and verification logic.
+- Most teams focus on `configs/hackathon_workflow.json` and `prompts/`. Advanced teams may edit `src/agents.py`.
+
+### What Students Must Not Modify
+- Frozen evidence, scoring inputs, generated output structures, and core infrastructure utilities (unless directed).
 
 ## Repository Layout
 
@@ -56,6 +75,8 @@ answer quality, evidence quality, runtime, and workflow design.
 ├── logs/                            # Generated at runtime, ignored by Git
 └── results/                         # Generated submissions/traces, ignored by Git
 ```
+
+> **Note on `qa_public.json`:** The public QA file is included for demonstration, testing, and artifact review. Instructors running a live event should provide question-only files to students and keep private questions and ground-truth answers in the instructor-facing leaderboard package.
 
 Important distinction:
 
@@ -102,6 +123,10 @@ evidence/repo/data/.gitkeep
 ```
 
 so the folder exists in a fresh checkout.
+
+## Cluster-Specific Paths
+
+The Slurm wrapper contains site-specific defaults from the original HCMUT deployment. Instructors should override variables such as `CLIENT_IMAGE`, `SERVER_IMAGE`, `OLLAMA_CACHE`, and `ALLOWED_MODELS_FILE` for their own cluster.
 
 ## First Run On Slurm
 
@@ -347,3 +372,20 @@ evidence/results/comparison.csv
 Do not cite hackathon infrastructure files such as `HACKATHON.md`,
 `configs/hackathon_workflow.json`, or `src/hackathon_workflow.py` as evidence for
 the training repository questions.
+
+## Educator Documentation
+
+For instructors and reviewers, please refer to the following resources:
+- [ARTIFACT.md](ARTIFACT.md): Context on the artifact and paired repository.
+- [LEARNING_OBJECTIVES.md](LEARNING_OBJECTIVES.md): Expected student outcomes.
+- [PREREQUISITES.md](PREREQUISITES.md): Required skills before attempting the assignment.
+- [ADAPTATION_NOTES.md](ADAPTATION_NOTES.md): Guidance on reusing this assignment.
+- [CUSTOM_WORKLOAD_GUIDE.md](CUSTOM_WORKLOAD_GUIDE.md): How to adapt this to a new HPC workload.
+- [sample_outputs/](sample_outputs/): Mock examples of generated traces and submissions.
+
+## License
+
+Code in this repository is released under the MIT License.
+
+Educational materials, documentation, prompts, handouts, and assignment descriptions are released under the Creative Commons Attribution 4.0 International (CC BY 4.0) License, unless otherwise noted.
+

@@ -1,0 +1,3 @@
+{"timestamp": 1690000000.123, "event": "agent_start", "agent": "file_inventory"}
+{"timestamp": 1690000005.456, "event": "llm_call", "agent": "file_inventory", "model": "llama3.2:3b", "duration": 5.2, "prompt_tokens": 500, "completion_tokens": 120}
+{"timestamp": 1690000005.500, "event": "agent_end", "agent": "file_inventory"}
