@@ -20,3 +20,9 @@ Instructors wishing to adapt this hackathon to a new HPC workload should follow 
 6. **Pre-Class Validation:**
    - Test the Python mock mode locally.
    - Perform at least one full baseline Slurm run before the live event to ensure the Ollama serving stack and workflow run seamlessly on the new evidence corpus.
+   - Validate a generated submission against the paired leaderboard's current
+     `SubmissionRequest`, then exercise the authenticated submission API.
+
+The mock check requires Python 3.10+ and a writable output directory only. The
+full path additionally requires site-provided containers and a pre-staged Ollama
+cache; container build recipes are intentionally not invented by this artifact.

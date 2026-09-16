@@ -19,6 +19,9 @@ The complexity of the task can be adjusted based on student experience levels:
 ## 3. Infrastructure Axis
 The repository can run in several environments:
 - **Full Cluster Setup:** Slurm + GPU nodes + local Apptainer LLM serving (Ollama).
-- **Cloud/Hosted Setup:** Replacing the local Ollama client with hosted LLM endpoints (e.g., OpenAI API).
+- **Remote Ollama Setup:** Point the existing client at an Ollama-compatible
+  service that implements `/api/generate`.
+- **Other Hosted APIs:** An OpenAI-compatible endpoint is not a drop-in
+  replacement. Supporting one requires adapting or replacing `src/ollama_client.py`.
 - **Container Variations:** Swapping Apptainer for Docker.
 - **Local/Mock Execution:** Using the built-in mock mode for offline development, or utilizing offline traces for testing without GPUs.

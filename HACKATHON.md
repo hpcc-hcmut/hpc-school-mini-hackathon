@@ -23,6 +23,10 @@ The provided starter demonstrates:
 
 ## Run Locally With Mock Outputs
 
+This structure/control-flow check requires Python 3.10+, the public checkout,
+and a writable output directory. It does not need Slurm, GPU/CUDA, Apptainer,
+Ollama, or cached models, and it is not an LLM-quality evaluation.
+
 ```bash
 python3 src/hackathon_workflow.py \
   --source-dir . \
@@ -43,6 +47,15 @@ results/hackathon_submission_local.json
 The `results/` directory is for runtime outputs. Static benchmark evidence lives in `evidence/results/`.
 
 ## Run On Slurm
+
+The reference path is: Slurm job → one GPU node → Apptainer Ollama server →
+pre-staged local model cache → loopback Ollama API → Apptainer Python workflow
+→ JSON trace and submission → optional leaderboard POST.
+
+Before submitting, instructors must set `CLIENT_IMAGE`, `SERVER_IMAGE`,
+`OLLAMA_CACHE`, and `ALLOWED_MODELS_FILE`. The configured cache/allow-list must
+contain `llama3.2:3b` and `qwen3:4b`. Models should normally be staged before the
+class rather than pulled from compute nodes.
 
 ```bash
 sbatch slurm/hackathon-parallel-workflow.slurm

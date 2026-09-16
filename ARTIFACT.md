@@ -19,3 +19,17 @@ This repository contains:
 ## Supported Paper Claims
 
 This artifact provides the reusable foundation discussed in the paper, enabling instructors to easily deploy a realistic AI/HPC workflow hackathon with minimal infrastructure overhead, adaptable along content, workflow, and infrastructure axes.
+
+## Execution envelopes
+
+Mock mode is a Python 3.10+ structure/control-flow test and needs no HPC or LLM
+runtime. The full reference path is a single Slurm job on one GPU node, running
+an Apptainer Ollama server from a pre-staged cache and the Python workflow in a
+client image; the workflow talks to Ollama over loopback and writes JSON outputs,
+then may POST to the leaderboard.
+
+The original HCMUT deployment requested one node, one task, four CPUs, one GPU,
+and 15 minutes, and used a V100 32 GB. That GPU model is historical, not an
+intrinsic requirement. Partition/QoS names, shared paths, images, and cache
+locations are site-specific. Cluster size and interconnect do not affect this
+single-node workflow.

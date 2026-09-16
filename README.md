@@ -126,7 +126,24 @@ so the folder exists in a fresh checkout.
 
 ## Cluster-Specific Paths
 
-The Slurm wrapper contains site-specific defaults from the original HCMUT deployment. Instructors should override variables such as `CLIENT_IMAGE`, `SERVER_IMAGE`, `OLLAMA_CACHE`, and `ALLOWED_MODELS_FILE` for their own cluster.
+The full path uses site-provided deployment assets; the public repository does
+not invent container build recipes that were not available for this release.
+Set all four variables before `sbatch`:
+
+- `CLIENT_IMAGE`: Apptainer image with Python 3.10+ for the workflow.
+- `SERVER_IMAGE`: Apptainer image containing the Ollama server.
+- `OLLAMA_CACHE`: read-only, pre-staged Ollama cache containing at least
+  `llama3.2:3b` and `qwen3:4b` for the public baseline.
+- `ALLOWED_MODELS_FILE`: site-managed text allow-list for student models.
+
+The server must provide Ollama `/api/tags` and `/api/generate` behavior. Models
+should normally be staged before class; compute-node downloads are not part of
+the reference deployment.
+
+The original HCMUT deployment requested one node, one task, four Slurm CPUs,
+one GPU, and 15 minutes, and used a V100 32 GB. V100 is not intrinsic.
+Partition/QoS names, shared paths, images, and cache locations are site-specific;
+cluster size and interconnect are irrelevant to this single-node workflow.
 
 ## First Run On Slurm
 
@@ -143,6 +160,10 @@ The Slurm wrapper will:
 3. start the Ollama server inside the provided serving container
 4. run `src/hackathon_workflow.py`
 5. write trace and submission files into `results/`
+
+Architecture: Slurm job → one GPU node → Apptainer Ollama server → local model
+cache → loopback Ollama API → Apptainer Python workflow → JSON trace and
+submission → optional leaderboard POST.
 
 Example generated files:
 
@@ -218,6 +239,10 @@ Useful knobs:
 - `max_chars_per_file`: per-file truncation limit.
 - `max_prompt_chars`: total prompt input limit for file-reading agents.
 
+The checked-in dual-model mapping is a reusable teaching baseline that
+demonstrates role-based routing, not an exact snapshot of every classroom run.
+Instructors may adapt it to locally available models.
+
 ## Default Workflow
 
 The starter workflow has these stages:
@@ -281,8 +306,15 @@ python3 src/hackathon_workflow.py \
   --mock
 ```
 
-Mock mode is only a smoke test. It does not evaluate answer quality. For real
-hackathon validation, use the full Slurm flow.
+Mock mode requires Python 3.10+, this public checkout, and a writable output
+directory. It does not require Slurm, GPU/CUDA, Apptainer, Ollama, or a model
+cache. No evidence-based minimum RAM requirement is claimed, and this release
+does not claim verified macOS testing. It checks structure/control flow; it does
+not reproduce classroom outcomes or evaluate LLM answer quality.
+
+The client calls Ollama's `/api/generate`. A remote Ollama-compatible service is
+supported, but a generic OpenAI-compatible endpoint is not a drop-in
+replacement; that backend requires a client adapter.
 
 ## Inspecting A Submission
 
@@ -388,4 +420,3 @@ For instructors and reviewers, please refer to the following resources:
 Code in this repository is released under the MIT License.
 
 Educational materials, documentation, prompts, handouts, and assignment descriptions are released under the Creative Commons Attribution 4.0 International (CC BY 4.0) License, unless otherwise noted.
-
