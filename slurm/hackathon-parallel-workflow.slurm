@@ -3,8 +3,6 @@
 # @permission DO_NOT_EDIT
 # @note Cluster/run wrapper; teams should configure via environment variables, not by editing this file.
 #SBATCH --job-name=hackathon-agents
-#SBATCH --partition=gpu-queue
-#SBATCH --qos=gpu-q
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=4
@@ -15,12 +13,12 @@
 
 set -euo pipefail
 
-# Site-specific defaults from the original deployment.
-# Override these variables before running on another cluster.
-export CLIENT_IMAGE=${CLIENT_IMAGE:-/share/summer-school/g001/containers/hpc-school-ai.sif}
-export SERVER_IMAGE=${SERVER_IMAGE:-/share/summer-school/g001/containers/llm-serving.sif}
-export OLLAMA_CACHE=${OLLAMA_CACHE:-/share/summer-school/g001/models/ollama}
-export ALLOWED_MODELS_FILE=${ALLOWED_MODELS_FILE:-/share/summer-school/g001/models/allowed_models.txt}
+# Site-provided deployment assets. Set these before sbatch; no private cluster
+# paths or container recipes are embedded in the public artifact.
+: "${CLIENT_IMAGE:?Set CLIENT_IMAGE to the Python workflow Apptainer image}"
+: "${SERVER_IMAGE:?Set SERVER_IMAGE to an Apptainer image containing Ollama}"
+: "${OLLAMA_CACHE:?Set OLLAMA_CACHE to a pre-staged Ollama model cache}"
+: "${ALLOWED_MODELS_FILE:?Set ALLOWED_MODELS_FILE to the site model allow-list}"
 
 export OLLAMA_PORT_CANDIDATES=${OLLAMA_PORT_CANDIDATES:-"11434 11435 11436 11437"}
 if [[ -n "${OLLAMA_PORT:-}" ]]; then

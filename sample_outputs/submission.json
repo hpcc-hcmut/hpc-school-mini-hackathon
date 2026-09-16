@@ -1,17 +1,695 @@
 {
-  "team_id": "sample-team",
-  "answers": [
-    {
-      "question_id": "sample_q1",
-      "answer": "The GPU is requested through the Slurm --gres directive.",
-      "evidence": ["slurm/example_gpu_job.slurm"],
-      "confidence": 0.85
-    }
-  ],
+  "team": {
+    "team_id": "sample-team",
+    "team_name": "Sample Team",
+    "slurm_job_id": "local"
+  },
   "workflow_metadata": {
-    "num_agents": 6,
-    "num_reasoners": 2,
-    "num_verifiers": 2,
-    "runtime_seconds": 120.5
+    "workflow_mode": "parallel",
+    "num_agents": 11,
+    "max_parallel_agents": 4,
+    "models_used": [
+      "llama3.2:3b",
+      "qwen3:4b"
+    ],
+    "model_roles": [
+      {
+        "model": "llama3.2:3b",
+        "roles": [
+          "config_extraction",
+          "file_inventory",
+          "metrics_extraction",
+          "question_planning",
+          "slurm_extraction",
+          "source_analysis",
+          "verification"
+        ]
+      },
+      {
+        "model": "qwen3:4b",
+        "roles": [
+          "answer_reasoning",
+          "evidence_aggregation"
+        ]
+      }
+    ],
+    "has_aggregator": true,
+    "has_verifier": true,
+    "llm_calls": 11,
+    "runtime_sec": 0.0,
+    "estimated_input_tokens": 29819,
+    "estimated_output_tokens": 402
+  },
+  "answer": {
+    "repository_summary": {
+      "main_entrypoint": "evidence/repo/src/train.py",
+      "workload_type": "deep_learning_training",
+      "framework": "pytorch/torchvision",
+      "model_family": "custom CIFAR ResNet",
+      "dataset_type": "CIFAR-100 ImageFolder",
+      "uses_gpu": true
+    },
+    "resource_recommendation": {
+      "gpu_count": 1,
+      "gpu_memory_class": "at least 5 GB",
+      "cpus_per_task": 4,
+      "system_memory_gb": 16,
+      "time_limit": "01:00:00",
+      "slurm_gres": "gpu:1",
+      "rationale": "The supplied Slurm and benchmark evidence uses one GPU and four CPUs; recorded peak GPU memory is below 5 GB."
+    },
+    "bottleneck_analysis": {
+      "primary_bottleneck": "gpu_compute",
+      "cpu": "Four data-loader workers keep the measured data-time ratio low.",
+      "gpu_compute": "GPU utilization is high for the deeper ResNet runs.",
+      "gpu_memory": "Recorded peak allocation is below 5 GB.",
+      "storage_io": "The benchmark does not show storage I/O dominating step time.",
+      "network_io": "The workload does not use distributed training.",
+      "logging_checkpoint": "Metrics, GPU timelines, and checkpoints are written at bounded intervals."
+    },
+    "answers": [
+      {
+        "question_id": "Q001",
+        "answer": "Baseline heuristic answer: inspect `evidence/repo/slurm/train-one.slurm`. GPU allocation and Slurm resource directives are defined in the training Slurm script.",
+        "evidence": [
+          {
+            "file": "evidence/repo/slurm/train-one.slurm",
+            "lines": [
+              6,
+              6
+            ],
+            "reason": "GPU allocation and Slurm resource directives are defined in the training Slurm script."
+          }
+        ],
+        "confidence": "low",
+        "difficulty": "easy",
+        "question": "Where is the GPU allocation for a single training run requested?"
+      },
+      {
+        "question_id": "Q002",
+        "answer": "Baseline heuristic answer: inspect `evidence/repo/slurm/train-one.slurm`. The Slurm wrapper shows how CUDA/GPU access is passed into Apptainer.",
+        "evidence": [
+          {
+            "file": "evidence/repo/slurm/train-one.slurm",
+            "lines": [
+              29,
+              29
+            ],
+            "reason": "The Slurm wrapper shows how CUDA/GPU access is passed into Apptainer."
+          }
+        ],
+        "confidence": "low",
+        "difficulty": "easy",
+        "question": "Where is CUDA made visible to the Apptainer training process?"
+      },
+      {
+        "question_id": "Q003",
+        "answer": "Baseline heuristic answer: inspect `evidence/repo/slurm/train-one.slurm`. The training wrapper records and summarizes GPU telemetry.",
+        "evidence": [
+          {
+            "file": "evidence/repo/slurm/train-one.slurm",
+            "lines": [
+              45,
+              45
+            ],
+            "reason": "The training wrapper records and summarizes GPU telemetry."
+          }
+        ],
+        "confidence": "low",
+        "difficulty": "easy",
+        "question": "Which script records the raw GPU timeline during training?"
+      },
+      {
+        "question_id": "Q004",
+        "answer": "Baseline heuristic answer: inspect `evidence/repo/slurm/train-one.slurm`. The training wrapper records and summarizes GPU telemetry.",
+        "evidence": [
+          {
+            "file": "evidence/repo/slurm/train-one.slurm",
+            "lines": [
+              45,
+              45
+            ],
+            "reason": "The training wrapper records and summarizes GPU telemetry."
+          }
+        ],
+        "confidence": "low",
+        "difficulty": "easy",
+        "question": "Which command summarizes the raw GPU timeline after training?"
+      },
+      {
+        "question_id": "Q005",
+        "answer": "Baseline heuristic answer: inspect `evidence/repo/src/data/prepare_cifar100_imagefolder.py`. Dataset preparation and split behavior live in the CIFAR-100 ImageFolder preparation script.",
+        "evidence": [
+          {
+            "file": "evidence/repo/src/data/prepare_cifar100_imagefolder.py",
+            "lines": [
+              5,
+              5
+            ],
+            "reason": "Dataset preparation and split behavior live in the CIFAR-100 ImageFolder preparation script."
+          }
+        ],
+        "confidence": "low",
+        "difficulty": "easy",
+        "question": "How does the dataset preparation script split CIFAR-100?"
+      },
+      {
+        "question_id": "Q006",
+        "answer": "Baseline heuristic answer: inspect `evidence/repo/src/data/datasets.py`. Train, validation, and test dataloaders are constructed in the dataset module.",
+        "evidence": [
+          {
+            "file": "evidence/repo/src/data/datasets.py",
+            "lines": [
+              5,
+              5
+            ],
+            "reason": "Train, validation, and test dataloaders are constructed in the dataset module."
+          }
+        ],
+        "confidence": "low",
+        "difficulty": "easy",
+        "question": "Which dataset loader is used for the train, validation, and test folders?"
+      },
+      {
+        "question_id": "Q007",
+        "answer": "Baseline heuristic answer: inspect `evidence/repo/src/models/resnet.py`. Custom ResNet variants and argument checks live in the model implementation.",
+        "evidence": [
+          {
+            "file": "evidence/repo/src/models/resnet.py",
+            "lines": [
+              5,
+              5
+            ],
+            "reason": "Custom ResNet variants and argument checks live in the model implementation."
+          }
+        ],
+        "confidence": "low",
+        "difficulty": "easy",
+        "question": "Which custom ResNet variants are registered in the model file?"
+      },
+      {
+        "question_id": "Q008",
+        "answer": "Baseline heuristic answer: inspect `evidence/repo/src/models/resnet.py`. Custom ResNet variants and argument checks live in the model implementation.",
+        "evidence": [
+          {
+            "file": "evidence/repo/src/models/resnet.py",
+            "lines": [
+              5,
+              5
+            ],
+            "reason": "Custom ResNet variants and argument checks live in the model implementation."
+          }
+        ],
+        "confidence": "low",
+        "difficulty": "medium",
+        "question": "What prevents users from passing pretrained or weights arguments to the custom models?"
+      },
+      {
+        "question_id": "Q009",
+        "answer": "Baseline heuristic answer: inspect `evidence/repo/src/utils/config.py`. Configuration validation defines accepted models and resource-related constraints.",
+        "evidence": [
+          {
+            "file": "evidence/repo/src/utils/config.py",
+            "lines": [
+              13,
+              13
+            ],
+            "reason": "Configuration validation defines accepted models and resource-related constraints."
+          }
+        ],
+        "confidence": "low",
+        "difficulty": "easy",
+        "question": "Where are the allowed model names and batch sizes defined?"
+      },
+      {
+        "question_id": "Q010",
+        "answer": "Baseline heuristic answer: inspect `evidence/repo/slurm/train-one.slurm`. The Slurm wrapper shows how CUDA/GPU access is passed into Apptainer.",
+        "evidence": [
+          {
+            "file": "evidence/repo/slurm/train-one.slurm",
+            "lines": [
+              29,
+              29
+            ],
+            "reason": "The Slurm wrapper shows how CUDA/GPU access is passed into Apptainer."
+          }
+        ],
+        "confidence": "low",
+        "difficulty": "medium",
+        "question": "Where does the training code fail if CUDA is unavailable?"
+      },
+      {
+        "question_id": "Q011",
+        "answer": "Baseline heuristic answer: inspect `evidence/repo/src/train.py`. The training entrypoint checks CUDA availability and constructs optimizer/scheduler objects.",
+        "evidence": [
+          {
+            "file": "evidence/repo/src/train.py",
+            "lines": [
+              100,
+              100
+            ],
+            "reason": "The training entrypoint checks CUDA availability and constructs optimizer/scheduler objects."
+          }
+        ],
+        "confidence": "low",
+        "difficulty": "easy",
+        "question": "Which optimizer and scheduler does the training script construct?"
+      },
+      {
+        "question_id": "Q012",
+        "answer": "Baseline heuristic answer: inspect `evidence/repo/src/engine/trainer.py`. Per-step metrics are emitted from the training loop.",
+        "evidence": [
+          {
+            "file": "evidence/repo/src/engine/trainer.py",
+            "lines": [
+              18,
+              18
+            ],
+            "reason": "Per-step metrics are emitted from the training loop."
+          }
+        ],
+        "confidence": "low",
+        "difficulty": "medium",
+        "question": "Where are per-step training metrics written?"
+      },
+      {
+        "question_id": "Q013",
+        "answer": "Baseline heuristic answer: inspect `evidence/repo/src/utils/config.py`. Configuration validation defines accepted models and resource-related constraints.",
+        "evidence": [
+          {
+            "file": "evidence/repo/src/utils/config.py",
+            "lines": [
+              13,
+              13
+            ],
+            "reason": "Configuration validation defines accepted models and resource-related constraints."
+          }
+        ],
+        "confidence": "low",
+        "difficulty": "easy",
+        "question": "How does the benchmark array choose which config to run?"
+      },
+      {
+        "question_id": "Q014",
+        "answer": "Baseline metric answer: resnet18_bs128_workers4_cpus4 (resnet18) is the highest run for avg_samples_per_sec with value 3213.636.",
+        "evidence": [
+          {
+            "file": "evidence/results/comparison.csv",
+            "lines": [
+              5,
+              5
+            ],
+            "reason": "Row for job 1148 contains avg_samples_per_sec=3213.636."
+          }
+        ],
+        "confidence": "medium",
+        "difficulty": "easy",
+        "question": "Which benchmark run achieved the highest average throughput?"
+      },
+      {
+        "question_id": "Q015",
+        "answer": "Baseline metric answer: resnet18_bs128_workers4_cpus4 (resnet18) is the lowest run for torch_peak_allocated_mb with value 915.0059.",
+        "evidence": [
+          {
+            "file": "evidence/results/comparison.csv",
+            "lines": [
+              5,
+              5
+            ],
+            "reason": "Row for job 1148 contains torch_peak_allocated_mb=915.0059."
+          }
+        ],
+        "confidence": "medium",
+        "difficulty": "easy",
+        "question": "Which benchmark run had the lowest PyTorch peak allocated memory?"
+      },
+      {
+        "question_id": "Q016",
+        "answer": "Baseline metric answer: resnet18_bs128_workers4_cpus4 (resnet18) is the best run for final_test_top1 with value 70.38.",
+        "evidence": [
+          {
+            "file": "evidence/results/comparison.csv",
+            "lines": [
+              5,
+              5
+            ],
+            "reason": "Row for job 1148 contains final_test_top1=70.38."
+          }
+        ],
+        "confidence": "medium",
+        "difficulty": "easy",
+        "question": "Which benchmark run had the best final test top-1 accuracy?"
+      },
+      {
+        "question_id": "Q017",
+        "answer": "Baseline metric answer: resnet152_bs64_workers4_cpus4 (resnet152) is the highest run for nvidia_smi_avg_gpu_utilization with value 92.0025.",
+        "evidence": [
+          {
+            "file": "evidence/results/comparison.csv",
+            "lines": [
+              4,
+              4
+            ],
+            "reason": "Row for job 1147 contains nvidia_smi_avg_gpu_utilization=92.0025."
+          }
+        ],
+        "confidence": "medium",
+        "difficulty": "medium",
+        "question": "Which run had the highest average GPU utilization?"
+      },
+      {
+        "question_id": "Q018",
+        "answer": "Baseline metric answer: resnet50_bs128_workers4_cpus4 (resnet50) is the highest run for nvidia_smi_max_memory_used_mb with value 4842.0.",
+        "evidence": [
+          {
+            "file": "evidence/results/comparison.csv",
+            "lines": [
+              7,
+              7
+            ],
+            "reason": "Row for job 1150 contains nvidia_smi_max_memory_used_mb=4842.0."
+          }
+        ],
+        "confidence": "medium",
+        "difficulty": "medium",
+        "question": "Which run had the highest maximum GPU memory used according to nvidia-smi?"
+      },
+      {
+        "question_id": "Q019",
+        "answer": "Baseline metric answer: resnet152_bs64_workers4_cpus4 (resnet152) is the slowest run for avg_samples_per_sec with value 408.7954.",
+        "evidence": [
+          {
+            "file": "evidence/results/comparison.csv",
+            "lines": [
+              4,
+              4
+            ],
+            "reason": "Row for job 1147 contains avg_samples_per_sec=408.7954."
+          }
+        ],
+        "confidence": "medium",
+        "difficulty": "easy",
+        "question": "Which benchmark run was slowest by average samples per second?"
+      },
+      {
+        "question_id": "Q020",
+        "answer": "Baseline metric answer: yes, the comparison table marks 6 of 6 runs as successful.",
+        "evidence": [
+          {
+            "file": "evidence/results/comparison.csv",
+            "lines": [
+              1,
+              1
+            ],
+            "reason": "The comparison CSV includes a success column for each compared run."
+          }
+        ],
+        "confidence": "medium",
+        "difficulty": "easy",
+        "question": "Did all six compared runs finish successfully?"
+      },
+      {
+        "question_id": "Q021",
+        "answer": "Baseline heuristic answer: this repository question likely needs evidence from the source, Slurm scripts, configs, or benchmark CSV files. Improve the agents or prompts to produce a more specific supported answer.",
+        "evidence": [
+          {
+            "file": "evidence/repo/src/train.py",
+            "lines": [
+              1,
+              1
+            ],
+            "reason": "Training code is part of the repository evidence corpus."
+          },
+          {
+            "file": "evidence/repo/slurm/train-one.slurm",
+            "lines": [
+              1,
+              1
+            ],
+            "reason": "Slurm scripts are part of the repository evidence corpus."
+          }
+        ],
+        "confidence": "low",
+        "difficulty": "easy",
+        "question": "What GPU model appears in the GPU summaries?"
+      },
+      {
+        "question_id": "Q022",
+        "answer": "Baseline heuristic answer: inspect `evidence/repo/src/models/resnet.py`. Custom ResNet variants and argument checks live in the model implementation.",
+        "evidence": [
+          {
+            "file": "evidence/repo/src/models/resnet.py",
+            "lines": [
+              5,
+              5
+            ],
+            "reason": "Custom ResNet variants and argument checks live in the model implementation."
+          }
+        ],
+        "confidence": "low",
+        "difficulty": "medium",
+        "question": "How similar were the custom run and the ResNet34 benchmark in model and batch size?"
+      },
+      {
+        "question_id": "Q023",
+        "answer": "Baseline heuristic answer: this repository question likely needs evidence from the source, Slurm scripts, configs, or benchmark CSV files. Improve the agents or prompts to produce a more specific supported answer.",
+        "evidence": [
+          {
+            "file": "evidence/repo/src/train.py",
+            "lines": [
+              1,
+              1
+            ],
+            "reason": "Training code is part of the repository evidence corpus."
+          },
+          {
+            "file": "evidence/repo/slurm/train-one.slurm",
+            "lines": [
+              1,
+              1
+            ],
+            "reason": "Slurm scripts are part of the repository evidence corpus."
+          }
+        ],
+        "confidence": "low",
+        "difficulty": "easy",
+        "question": "Which run had the best final test top-5 accuracy?"
+      },
+      {
+        "question_id": "Q024",
+        "answer": "Baseline heuristic answer: this repository question likely needs evidence from the source, Slurm scripts, configs, or benchmark CSV files. Improve the agents or prompts to produce a more specific supported answer.",
+        "evidence": [
+          {
+            "file": "evidence/repo/src/train.py",
+            "lines": [
+              1,
+              1
+            ],
+            "reason": "Training code is part of the repository evidence corpus."
+          },
+          {
+            "file": "evidence/repo/slurm/train-one.slurm",
+            "lines": [
+              1,
+              1
+            ],
+            "reason": "Slurm scripts are part of the repository evidence corpus."
+          }
+        ],
+        "confidence": "low",
+        "difficulty": "medium",
+        "question": "Which run drew the highest average power?"
+      },
+      {
+        "question_id": "Q025",
+        "answer": "Baseline metric answer: resnet18_bs128_workers4_cpus4 (resnet18) is the best run for final_test_top1 with value 70.38.",
+        "evidence": [
+          {
+            "file": "evidence/results/comparison.csv",
+            "lines": [
+              5,
+              5
+            ],
+            "reason": "Row for job 1148 contains final_test_top1=70.38."
+          }
+        ],
+        "confidence": "medium",
+        "difficulty": "medium",
+        "question": "Did the deeper ResNet50 outperform ResNet18 on final test top-1 accuracy?"
+      }
+    ],
+    "evidence": [
+      {
+        "claim": "The workload trains custom ResNet image classifiers on CIFAR-100 using PyTorch and torchvision.",
+        "source_file": "evidence/repo/src/train.py",
+        "artifact_type": "source",
+        "evidence_summary": "The entrypoint creates the model, data loaders, optimizer, scheduler, and metric outputs.",
+        "confidence": "high"
+      },
+      {
+        "claim": "A training run requests one GPU and four CPUs through Slurm.",
+        "source_file": "evidence/repo/slurm/train-one.slurm",
+        "artifact_type": "slurm",
+        "evidence_summary": "The batch header requests four CPUs per task and one GPU.",
+        "confidence": "high"
+      },
+      {
+        "claim": "The measured workload is primarily GPU-compute bound.",
+        "source_file": "evidence/results/comparison.csv",
+        "artifact_type": "benchmark_csv",
+        "evidence_summary": "Successful runs show high GPU utilization and low data-time ratios.",
+        "confidence": "high"
+      }
+    ],
+    "uncertainty": [
+      "System memory was not measured directly; 16 GB is a conservative teaching baseline.",
+      "GPU capacity is inferred from the checked-in benchmark summaries."
+    ],
+    "validation_plan": [
+      "Run the training job with the recommended resources and confirm summary CSV generation.",
+      "Inspect comparison.csv for success, throughput, utilization, and memory usage.",
+      "Inspect GPU timeline CSVs for sustained utilization and memory exhaustion."
+    ]
+  },
+  "trace_summary": {
+    "agents": [
+      {
+        "agent_name": "aggregator",
+        "role": "evidence_aggregation",
+        "model": "qwen3:4b",
+        "calls": 1,
+        "runtime_sec": 0.0,
+        "input_tokens": 632,
+        "output_tokens": 69
+      },
+      {
+        "agent_name": "code_agent",
+        "role": "source_analysis",
+        "model": "llama3.2:3b",
+        "calls": 1,
+        "runtime_sec": 0.0,
+        "input_tokens": 11017,
+        "output_tokens": 61
+      },
+      {
+        "agent_name": "config_agent",
+        "role": "config_extraction",
+        "model": "llama3.2:3b",
+        "calls": 1,
+        "runtime_sec": 0.0,
+        "input_tokens": 3044,
+        "output_tokens": 51
+      },
+      {
+        "agent_name": "file_inventory",
+        "role": "file_inventory",
+        "model": "llama3.2:3b",
+        "calls": 1,
+        "runtime_sec": 0.0,
+        "input_tokens": 1039,
+        "output_tokens": 64
+      },
+      {
+        "agent_name": "metrics_agent",
+        "role": "metrics_extraction",
+        "model": "llama3.2:3b",
+        "calls": 1,
+        "runtime_sec": 0.0,
+        "input_tokens": 8330,
+        "output_tokens": 42
+      },
+      {
+        "agent_name": "qa_agent",
+        "role": "question_planning",
+        "model": "llama3.2:3b",
+        "calls": 1,
+        "runtime_sec": 0.0,
+        "input_tokens": 991,
+        "output_tokens": 39
+      },
+      {
+        "agent_name": "reasoner_1",
+        "role": "answer_reasoning",
+        "model": "qwen3:4b",
+        "calls": 1,
+        "runtime_sec": 0.0,
+        "input_tokens": 728,
+        "output_tokens": 8
+      },
+      {
+        "agent_name": "reasoner_2",
+        "role": "answer_reasoning",
+        "model": "qwen3:4b",
+        "calls": 1,
+        "runtime_sec": 0.0,
+        "input_tokens": 703,
+        "output_tokens": 8
+      },
+      {
+        "agent_name": "slurm_agent",
+        "role": "slurm_extraction",
+        "model": "llama3.2:3b",
+        "calls": 1,
+        "runtime_sec": 0.0,
+        "input_tokens": 1992,
+        "output_tokens": 44
+      },
+      {
+        "agent_name": "verifier_1",
+        "role": "verification",
+        "model": "llama3.2:3b",
+        "calls": 1,
+        "runtime_sec": 0.0,
+        "input_tokens": 684,
+        "output_tokens": 8
+      },
+      {
+        "agent_name": "verifier_2",
+        "role": "verification",
+        "model": "llama3.2:3b",
+        "calls": 1,
+        "runtime_sec": 0.0,
+        "input_tokens": 659,
+        "output_tokens": 8
+      }
+    ],
+    "parallel_groups": [
+      {
+        "name": "parallel_evidence_extraction",
+        "agents": [
+          "file_inventory",
+          "code_agent",
+          "config_agent",
+          "slurm_agent",
+          "metrics_agent",
+          "qa_agent"
+        ],
+        "start_time": "1789490920.3229144",
+        "end_time": "1789490920.3790054"
+      },
+      {
+        "name": "parallel_answer_reasoning",
+        "agents": [
+          "reasoner_1",
+          "reasoner_2"
+        ],
+        "start_time": "1789490920.3795333",
+        "end_time": "1789490920.3800228"
+      },
+      {
+        "name": "parallel_answer_verification",
+        "agents": [
+          "verifier_1",
+          "verifier_2"
+        ],
+        "start_time": "1789490920.3800378",
+        "end_time": "1789490920.3806531"
+      }
+    ],
+    "verification": {
+      "ran": true,
+      "issues_found": 0,
+      "issues_fixed": 0
+    }
   }
 }

@@ -289,7 +289,10 @@ def normalize_answers(
                 "evidence": [],
                 "confidence": "low",
             })
+        answer = dict(answer)
         answer.setdefault("question_id", qid)
+        answer["difficulty"] = str(question.get("difficulty", ""))
+        answer["question"] = str(question.get("question", ""))
         answer["answer"] = rewrite_answer_text(str(answer.get("answer", FALLBACK_ANSWER)))
         baseline_items = baseline_by_id.get(qid, {}).get("evidence", [])
         answer["evidence"] = normalize_evidence_items(

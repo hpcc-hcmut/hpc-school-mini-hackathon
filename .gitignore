@@ -6,9 +6,11 @@ qa_private.json
 
 # Generated packages and runtime outputs
 repo.zip
-logs/
+logs/*
+!logs/.gitkeep
 results/hackathon_trace_*.jsonl
 results/hackathon_submission_*.json
+!results/.gitkeep
 
 # Training artifacts
 checkpoints/*
