@@ -1,6 +1,8 @@
 # HPC School Mini Hackathon
 
-> **Public Release Note:** This repository is the student-facing package for the EduHPC Peachy assignment paper. 
+> **Public Release Note:** This repository is the student-facing mini-hackathon
+> package accompanying *An AI-Anchored Pathway into HPC Practice: Design and
+> Initial Evaluation of a Three-Day Summer School in Vietnam* (EduHPC'26).
 > The paired instructor-facing leaderboard package is available at: 
 > https://github.com/hpcc-hcmut/hpc-summer-school-leaderboard
 >

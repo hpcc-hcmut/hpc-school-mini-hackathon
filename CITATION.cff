@@ -1,6 +1,6 @@
 cff-version: 1.2.0
-message: "If you use this artifact, please cite the associated EduHPC Peachy assignment paper."
-title: "A Slurm-Based Multi-Agent LLM Hackathon for Teaching Evidence-Grounded AI/HPC Workflows"
+message: "If you use this artifact, please cite the associated EduHPC'26 paper."
+title: "An AI-Anchored Pathway into HPC Practice: Design and Initial Evaluation of a Three-Day Summer School in Vietnam"
 authors:
   - family-names: Le Hai
     given-names: Thanh Hoang
@@ -14,7 +14,7 @@ authors:
     given-names: Nam
 preferred-citation:
   type: article
-  title: "A Slurm-Based Multi-Agent LLM Hackathon for Teaching Evidence-Grounded AI/HPC Workflows"
+  title: "An AI-Anchored Pathway into HPC Practice: Design and Initial Evaluation of a Three-Day Summer School in Vietnam"
   authors:
     - family-names: Le Hai
       given-names: Thanh Hoang

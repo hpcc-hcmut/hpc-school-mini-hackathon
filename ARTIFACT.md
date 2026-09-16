@@ -1,8 +1,10 @@
 # Artifact Information
 
-This repository is the student-facing package for the Peachy assignment paper:
-
-"A Slurm-Based Multi-Agent LLM Hackathon for Teaching Evidence-Grounded AI/HPC Workflows"
+This repository is the student-facing mini-hackathon package accompanying the
+EduHPC'26 paper *An AI-Anchored Pathway into HPC Practice: Design and Initial
+Evaluation of a Three-Day Summer School in Vietnam*. It is one instructional
+component of the three-day summer school described in that paper, rather than
+the complete school or a record of every historical classroom run.
 
 The paired instructor-facing leaderboard package is available at:
 https://github.com/hpcc-hcmut/hpc-summer-school-leaderboard
@@ -16,9 +18,14 @@ This repository contains:
 - **Slurm Infrastructure:** Job wrappers (`slurm/`) to spawn agents inside Apptainer.
 - **Sample Questions:** A set of public scaffolding questions (`qa_public.json`).
 
-## Supported Paper Claims
+## Artifact scope
 
-This artifact provides the reusable foundation discussed in the paper, enabling instructors to easily deploy a realistic AI/HPC workflow hackathon with minimal infrastructure overhead, adaptable along content, workflow, and infrastructure axes.
+This public release supports inspection, execution, and adaptation of the
+student-facing mini-hackathon. It includes a public dual-model baseline, mock
+mode for structure/control-flow testing, and documentation for the reference
+Slurm/Ollama path. Site-provided containers, model caches, and local deployment
+configuration remain necessary for the full path; mock mode does not reproduce
+student performance or historical competition scores.
 
 ## Execution envelopes
 
